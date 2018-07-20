@@ -11,14 +11,6 @@
     groups: apache
     name: "{{ roles_common_deploy_user }}"
 
-- name: set permissions for Apache on application root
-  file:
-    path: "/home/{{ roles_common_deploy_user }}"
-    state: directory
-    owner: "{{ roles_common_deploy_user }}"
-    group: apache
-    mode: 0710
-
 - name: set umask to add writable permission for apache group users
   lineinfile:
     path: /etc/sysconfig/httpd
