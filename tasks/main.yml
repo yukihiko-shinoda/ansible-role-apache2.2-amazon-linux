@@ -1,4 +1,8 @@
 ---
+- name: install ius repository
+  yum:
+    name: https://rhel6.iuscommunity.org/ius-release.rpm
+
 - name: install apache
   yum:
     name: "{{ item }}"
@@ -16,10 +20,10 @@
     path: /etc/sysconfig/httpd
     line: umask 002
 
-- name: enable service on boot
+- name: enable service on boot (excluding case when docker container)
   service:
     name: httpd
-    enabled: yes
+    enabled: "{{ 'no' if 'container' in group_names else 'yes' }}"
 
 - name: set logrotate as daily
   blockinfile:
