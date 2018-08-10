@@ -10,10 +10,21 @@
     - httpd
     - httpd-tools
 
+- name: set running user and group
+  replace:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
+  with_items:
+    - regexp: ^User\s.*$
+      replace: User {{ apache_2_2_running_user }}
+    - regexp: ^Group\s.*$
+      replace: Group {{ apache_2_2_running_user }}
+
 - name: add deploy user into apache group
   user:
-    groups: apache
-    name: "{{ roles_common_deploy_user }}"
+    groups: '{{ apache_2_2_running_user }}'
+    name: '{{ roles_common_deploy_user }}'
 
 - name: set umask to add writable permission for apache group users
   lineinfile:
